@@ -57,20 +57,26 @@ function Weather() {
     }
     if (url) {
       try {
-        //   const response = await fetch(url);
-        const data = SAMPLE; //await response.json();
+        const response = await fetch(url);
+        const data = await response.json(); //SAMPLE;
 
-        setHumidity(data?.main?.humidity);
-        setWindRate(Math.floor(data?.wind?.speed));
-        setTemp(Math.floor(data?.main?.temp));
-        setLocationTxt(data?.name);
-        if (data?.weather?.length > 0) {
-          setWeatherIconFunction(data.weather[0]);
+        if (data?.message) {
+          toast.error(data?.message);
+        }
+        if (data?.id) {
+          setHumidity(data?.main?.humidity);
+          setWindRate(Math.floor(data?.wind?.speed));
+          setTemp(Math.floor(data?.main?.temp));
+          setLocationTxt(data?.name);
+          if (data?.weather?.length > 0) {
+            setWeatherIconFunction(data.weather[0]);
+          }
         }
         setLoading(false);
       } catch (error) {
         setLoading(false);
         console.log("API error", error);
+        toast.error("Something went wrong");
       }
     } else {
       toast.error("Please enter valid user location");
@@ -109,7 +115,7 @@ function Weather() {
 
   return (
     <>
-      <ToastContainer position="top-right" autoClose={2000} />
+      <ToastContainer position="top-right" autoClose={1000} />
 
       {/* <button onClick={getUserLocation}>Get User Location</button>
       {userLocation && (
