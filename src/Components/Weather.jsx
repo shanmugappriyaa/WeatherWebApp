@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import serachIcon from "../assets/search.png";
 import cloudIcon from "../assets/cloud.png";
 import humditityIcon from "../assets/humidity.png";
 import windIcon from "../assets/wind.png";
 import clearIcon from "../assets/clear.png";
 import drizzleIcon from "../assets/drizzle.png";
 import rainIcon from "../assets/rain.png";
-import { SAMPLE } from "./constants";
 import { ToastContainer, toast } from "react-toastify";
 
 function Weather() {
@@ -45,10 +43,12 @@ function Weather() {
     }
   };
 
+  // define the function that finds weather info based on location/ longitude & latitude
   const fetchWeatherApi = async () => {
+    // show loading
     setLoading(true);
-    console.log("location=========> ", location);
-    // const options = { method: "GET", headers: { accept: "application/json" } };
+
+    // define url based on location/ longitude & latitude
     let url = "";
     if (location) {
       url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
@@ -58,11 +58,14 @@ function Weather() {
     if (url) {
       try {
         const response = await fetch(url);
-        const data = await response.json(); //SAMPLE;
+        const data = await response.json();
 
-        if (data?.message) {
+        // showing toast suppose if user given city name is invalid
+        if (data?.cod && data?.message) {
           toast.error(data?.message);
         }
+
+        // Update the UI with weather API response data
         if (data?.id) {
           setHumidity(data?.main?.humidity);
           setWindRate(Math.floor(data?.wind?.speed));
@@ -72,17 +75,23 @@ function Weather() {
             setWeatherIconFunction(data.weather[0]);
           }
         }
+        // hide loading
         setLoading(false);
       } catch (error) {
+        // hide loading
         setLoading(false);
         console.log("API error", error);
+
+        // showing toast if something went wrong while API fail
         toast.error("Something went wrong");
       }
     } else {
+      // showing toast if user given empty location
       toast.error("Please enter valid user location");
     }
   };
 
+  // update weathr icon based on the value return from the API
   const setWeatherIconFunction = (weatherObj) => {
     if (weatherObj.icon === "01d" || weatherObj.icon === "01n") {
       setWeatherIcon(clearIcon);
@@ -103,12 +112,14 @@ function Weather() {
     }
   };
 
+  // based on geo location finding weather info
   useEffect(() => {
     if (userLocation?.longitude && userLocation?.latitude) {
       fetchWeatherApi();
     }
   }, [userLocation]);
 
+  //to retrieves the users location
   useEffect(() => {
     getUserLocation();
   }, []);
@@ -117,14 +128,6 @@ function Weather() {
     <>
       <ToastContainer position="top-right" autoClose={1000} />
 
-      {/* <button onClick={getUserLocation}>Get User Location</button>
-      {userLocation && (
-        <div>
-          <h2>User Location</h2>
-          <p>Latitude: {userLocation.latitude}</p>
-          <p>Longitude: {userLocation.longitude}</p>
-        </div>
-      )} */}
       <div className="container">
         <div className="serach-bar d-flex justify-content-center">
           <div className="col-8 d-flex gap-2">
