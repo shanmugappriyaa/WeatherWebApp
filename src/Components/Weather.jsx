@@ -17,7 +17,7 @@ function Weather() {
 
   const [weatherIcon, setWeatherIcon] = useState(cloudIcon);
   const [loading, setLoading] = useState(false);
-
+// api key of open weather map
   const apiKey = "af68d200fb55816225a7854a76698c7a";
 
   const [userLocation, setUserLocation] = useState(null);
