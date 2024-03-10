@@ -32,6 +32,10 @@ npm install
 npm run dev
 6.Open your browser and visit http://localhost:5173 to view the application.
 
+# Contact  information
+Email-id:pspri03@gmail.com
+Mobile: 7339499174
+
 
 
 
